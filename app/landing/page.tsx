@@ -1,14 +1,16 @@
 import React from 'react'
-import Link from 'next/link'
+import Toit1 from "../../components/batiments/Immeuble/toit1"
 
 //landing page
 const page = () => {
-    const salleNumber = "hopla";
-  return (
-    <div className='bg-white w-full h-full'>
-        <Link href={`/salle/${salleNumber}`} className='w-24 h-24 bg-blue-200'>Salle 001</Link>
-    </div>
-  )
+    return (
+        <div className="flex flex-col items-center w-full h-full bg-cover bg-fixed bg-no-repeat bg-center bg-[url('./assets/Pixel_Art_Background.jpg')]">
+            <div className='flex flex-col justify-center w-2/3 h-auto'>
+                <Toit1/>
+            </div>
+        </div>
+           
+    )
 }
 
 export default page
