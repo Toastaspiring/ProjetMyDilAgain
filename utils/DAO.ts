@@ -89,5 +89,4 @@ export async function GetEtages(idBatiment:number){
     } else {
         return []; // Return an empty array if the batiment is not found
     }
-
 }
