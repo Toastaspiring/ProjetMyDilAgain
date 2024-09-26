@@ -1,37 +1,69 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
-import { GeistSans } from "geist/font/sans";
-import { ThemeProvider } from "next-themes";
-import Link from "next/link";
-import "./globals.css";
-import LandingPage from "./landing/page";
-import Immeuble from '../components/batiments/Immeuble/immeuble'
+"use client"
+import React, { useState, useEffect } from 'react';
+import { TypeBatiment } from '@/app/types/TypeBatiment';
+import Immeuble from '../components/batiments/Immeuble/immeuble';
+import './globals.css'
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const layout = () => { 
 
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
-};
+  // Données de test corrigées (label en minuscule)
+  const testData: TypeBatiment = {
+    Label: "Bâtiment A",
+    etages: [
+      {
+        numero: 1,
+        pieces: [
+          {
+            nomPiece: "Salle de Réunion",
+            urlPlanning: "https://example.com/planning/salle-reunion-1"
+          },
+          {
+            nomPiece: "Bureau Directeur",
+            urlPlanning: "https://example.com/planning/bureau-directeur-1"
+          }
+        ]
+      },
+      {
+        numero: 2,
+        pieces: [
+          {
+            nomPiece: "Salle de Conférence",
+            urlPlanning: "https://example.com/planning/salle-conference-2"
+          },
+          {
+            nomPiece: "Bureau RH",
+            urlPlanning: "https://example.com/planning/bureau-rh-2"
+          }
+        ]
+      }
+    ]
+  };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // CREER des composants Batiments pour pouvoir les appeler en fonction du nombre max de fenetre et d'étages
-  // et créer nu fonction pour gérer lequel est appelé (en dehors pour faire ça bien)
+  // Gestion de l'état genre avec un état initial de 1
+  const [genre, setGenre] = useState<number>(1);
+
+  // Fonction pour définir le genre en fonction du nombre d'étages
+  function getGenre(batiment: TypeBatiment) {
+    const nbEtages: number = batiment.etages.length;
+    if (nbEtages > 2) {
+      setGenre(2); // Utilisation de setGenre pour mettre à jour l'état
+    } else {
+      setGenre(1); // Assurez-vous que le genre redevient 1 si les conditions sont remplies
+    }
+  }
+
+  // Utilisation de useEffect pour déterminer le genre au montage du composant
+  useEffect(() => {
+    getGenre(testData);
+  }, []); // Le tableau vide signifie que cet effet s'exécute uniquement une fois, au montage
+
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
-      <body className="flex w-full h-screen bg-red-200">
-        <Immeuble/>
+    <html lang="en">
+      <body className="flex w-full h-screen justify-center overflow-scroll overflow-x-hidden items-end bg-cover bg-[url('/assets/pixel_wallpaper.jpg')]">
+        <Immeuble batiment={testData}/>
       </body>
     </html>
   );
 }
+
+export default layout;
